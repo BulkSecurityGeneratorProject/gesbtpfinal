@@ -1,0 +1,101 @@
+<div>
+    <h2>
+        <span jhiTranslate="gesBtpApp.facture.home.title">Factures</span>
+        <button class="btn btn-primary float-right jh-create-entity create-facture" [routerLink]="['/', { outlets: { popup: ['facture-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span class="hidden-sm-down"  jhiTranslate="gesBtpApp.facture.home.createLabel">
+            Create new Facture
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+        <div class="col-sm-12">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'gesBtpApp.facture.home.search' | translate }}">
+                    <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                        <span class="fa fa-search"></span>
+                    </button>
+                    <button class="input-group-append btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <span class="fa fa-trash-o"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="factures">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="dateCreation"><span jhiTranslate="gesBtpApp.facture.dateCreation">Date Creation</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="validite"><span jhiTranslate="gesBtpApp.facture.validite">Validite</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="remise"><span jhiTranslate="gesBtpApp.facture.remise">Remise</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="chantierNomChantier"><span jhiTranslate="gesBtpApp.facture.chantier">Chantier</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="travauxNomTrav"><span jhiTranslate="gesBtpApp.facture.travaux">Travaux</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="entrepriseName"><span jhiTranslate="gesBtpApp.facture.entreprise">Entreprise</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let facture of factures ;trackBy: trackId">
+                <td><a [routerLink]="['../facture', facture.id ]">{{facture.id}}</a></td>
+                <td>{{facture.dateCreation | date:'mediumDate'}}</td>
+                <td>{{facture.validite | date:'mediumDate'}}</td>
+                <td>{{facture.remise}}</td>
+                <td>
+                    <div *ngIf="facture.chantierId">
+                        <a [routerLink]="['../chantier', facture.chantierId  ]" >{{facture.chantierNomChantier}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facture.travauxId">
+                        <a [routerLink]="['../travaux', facture.travauxId  ]" >{{facture.travauxNomTrav}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="facture.entrepriseId">
+                        <a [routerLink]="['../entreprise', facture.entrepriseId  ]" >{{facture.entrepriseName}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../facture', facture.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'facture/'+ facture.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'facture/'+ facture.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="factures && factures.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{
+    "gesBtpApp": {
+        "EtatChantier" : {
+            "null": "",
+            "A_L_ETUDE": "A_L_ETUDE",
+            "EN_COURS": "EN_COURS",
+            "EN_RETARD": "EN_RETARD",
+            "PERDU": "PERDU"
+        }
+    }
+}

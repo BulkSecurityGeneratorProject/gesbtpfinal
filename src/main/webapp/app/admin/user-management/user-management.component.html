@@ -1,0 +1,150 @@
+<!-- <div>
+    <h2>
+        <span jhiTranslate="userManagement.home.title">Users</span>
+        <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
+            <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="table-responsive" *ngIf="users">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <span class="fa fa-sort"></span></th>
+                <th></th>
+                <th jhiSortBy="entreprise" *ngIf="currentAccount.entreprise"><span jhiTranslate="userManagementEntreprise">Entreprise</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="langKey"> <span jhiTranslate="userManagement.langKey">Lang Key</span> <span class="fa fa-sort"></span></th>
+                <th><span jhiTranslate="userManagement.profiles">Profiles</span></th>
+                <th jhiSortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody *ngIf ="users">
+            <tr *ngFor="let user of users; trackBy: trackIdentity">
+                <td><a [routerLink]="['../user-management', user.login]">{{user.id}}</a></td>
+                <td>{{user.login}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated"
+                            jhiTranslate="userManagement.deactivated">Deactivated</button>
+                    <button class="btn btn-success btn-sm" (click)="setActive(user, false)" *ngIf="user.activated"
+                            [disabled]="currentAccount.login === user.login" jhiTranslate="userManagement.activated">Activated</button>
+                </td>
+                <td *ngIf="!currentAccount.entreprise">{{user.entreprise?.name}}</td>
+                <td>{{user.langKey}}</td>
+                <td>
+                    <div *ngFor="let authority of user.authorities">
+                        <span class="badge badge-info">{{ authority }}</span>
+                    </div>
+                </td>
+                <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{user.lastModifiedBy}}</td>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../user-management', user.login]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="users">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div> -->
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Recherche">
+  </mat-form-field>
+  <button mat-fab style="float:right; background-color:green" 
+  matTooltip="Ajouter nouvel utilisateur"
+  [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
+     <mat-icon >add</mat-icon></button>
+  <div class="mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource" matSort>
+  
+      <!-- ID Column -->
+      <ng-container matColumnDef="login">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Login </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.login}} </mat-cell>
+      </ng-container> 
+  
+      <!-- nomTrav Column -->
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Nom </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.lastName }} </mat-cell>
+      </ng-container>
+
+       <!-- nomTrav Column -->
+       <ng-container matColumnDef="firstName">
+         <mat-header-cell *matHeaderCellDef mat-sort-header> Prenom</mat-header-cell>
+         <mat-cell *matCellDef="let row"> {{row.firstName}} </mat-cell>
+       </ng-container>
+
+        <!-- nomTrav Column -->
+        <ng-container matColumnDef="email">
+         <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+         <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+       </ng-container>
+
+       <!-- modifier Column -->
+       <ng-container matColumnDef="det">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>  </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                    <!-- <a mat-mini-fab style="margin:1%" routerLink="../client/{{row.id}}"color="primary"><mat-icon>visibility</mat-icon></a>     
+                 -->
+                 <button mat-mini-fab style="margin:1%"
+                 [routerLink]="['../user-management', row.login]"
+                  color="primary" matTooltip="Details"><mat-icon>visibility</mat-icon></button> 
+
+                     <button mat-mini-fab style="margin:1%"
+                     [routerLink]="['/', { outlets: { popup: 'user-management/'+ row.login + '/edit'} }]"
+                      color="green" matTooltip="Modifier"><mat-icon>create</mat-icon></button> 
+
+                      <button mat-mini-fab style="margin:1%"
+                                 [routerLink]="['/', { outlets: { popup: 'user-management/'+ row.login + '/delete'} }]"
+                                  color="warn" matTooltip="Supprimer"> 
+                                   <mat-icon >delete</mat-icon>
+                              </button>
+                         </mat-cell>
+          </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>   
+  
+</div>
+  <div>
+    
