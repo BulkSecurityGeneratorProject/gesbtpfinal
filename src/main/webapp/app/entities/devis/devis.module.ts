@@ -23,6 +23,7 @@ import {
 } from './';
 import { DevisParChantierComponent } from './devis-par-chantier.component';
 import { MatCardModule, MatTableModule, MatInputModule, MatSortModule, MatPaginatorModule, MatExpansionModule, MatFormFieldModule, MatGridListModule } from '@angular/material';
+import { LigneDevisComponent } from './ligne-devis.component';
 
 const ENTITY_STATES = [
     ...devisRoute,
@@ -56,6 +57,7 @@ const ENTITY_STATES = [
         DevisPopupComponent,
         DevisDeletePopupComponent,
         DevisParChantierComponent,
+        LigneDevisComponent
     ],
     entryComponents: [
         DevisComponent,
@@ -63,6 +65,7 @@ const ENTITY_STATES = [
         DevisPopupComponent,
         DevisDeleteDialogComponent,
         DevisDeletePopupComponent,
+        LigneDevisComponent,
     ],
     providers: [
         DevisService,

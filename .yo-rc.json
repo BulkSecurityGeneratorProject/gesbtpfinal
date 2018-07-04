@@ -37,7 +37,7 @@
     "jwtSecretKey": "6fe7c448c15494f740a3c7e6b702353a2123fbb5",
     "jhiPrefix": "jhi",
     "herokuDeployType": "jar",
-    "herokuAppName": "ges-btp"
+    "herokuAppName": "gesbtp-2"
   },
   "generator-jhipster-multitenancy": {
     "tenantName": "entreprise"
