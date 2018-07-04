@@ -23,6 +23,11 @@ export class PaiementComponent implements OnInit {
   errorUserExists: string;
   registerAccount: any;
   success: boolean;
+  name: string;
+  commercialName: string;
+  entrepriseAdminEmail: string;
+  sirenNumber: string;
+  telephone: string;
   // modalRef: NgbModalRef;
 
   constructor(
